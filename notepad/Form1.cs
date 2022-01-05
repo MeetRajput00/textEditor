@@ -98,34 +98,30 @@ namespace notepad
             }
         }
 
-        private void printToolStripMenuItem_Click(object sender, System.Drawing.Printing.PrintPageEventArgs ev)
+        private void fontToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            StringReader myReader = new StringReader(richTextBox1.Text);
-            float linesPerPage = 0;
-            float yPosition = 0;
-            int count = 0;
-            float leftMargin = ev.MarginBounds.Left;
-            float topMargin = ev.MarginBounds.Top;
-            string line = null;
-            Font printFont = this.richTextBox1.Font;
-            SolidBrush myBrush = new SolidBrush(Color.Black);
-            // Work out the number of lines per page, using the MarginBounds.  
-            linesPerPage = ev.MarginBounds.Height / printFont.GetHeight(ev.Graphics);
-            // Iterate over the string using the StringReader, printing each line.  
-            while (count < linesPerPage && ((line = myReader.ReadLine()) != null))
+            FontDialog fd = new FontDialog();
+            if (fd.ShowDialog() != DialogResult.Cancel)
             {
-                // calculate the next line position based on the height of the font according to the printing device  
-                yPosition = topMargin + (count * printFont.GetHeight(ev.Graphics));
-                // draw the next line in the rich edit control  
-                ev.Graphics.DrawString(line, printFont, myBrush, leftMargin, yPosition, new StringFormat());
-                count++;
+                richTextBox1.Font = fd.Font;
             }
-            // If there are more lines, print another page.  
-            if (line != null)
-                ev.HasMorePages = true;
-            else
-                ev.HasMorePages = false;
-            myBrush.Dispose();
+        }
+
+        private void zoomInToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            richTextBox1.Font = new Font(richTextBox1.Font.FontFamily, richTextBox1.Font.Size + 3);
+        }
+
+        private void zoomOutToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            richTextBox1.Font = new Font(richTextBox1.Font.FontFamily, richTextBox1.Font.Size - 3);
+
+        }
+
+        private void restoreDefaultToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            richTextBox1.Font = new Font(richTextBox1.Font.FontFamily, 9);
+
         }
     }
 }
